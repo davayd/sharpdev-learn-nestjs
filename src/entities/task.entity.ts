@@ -14,4 +14,7 @@ export class Task {
 
   @Enum(() => TaskStatusEnum)
   status: TaskStatusEnum;
+
+  @Property()
+  test?: string;
 }
