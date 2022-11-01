@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { PatchTaskDto } from './dto/patch-task.dto';
-import { Task } from 'src/entities/task.entity';
+import { Task } from 'src/tasks/entities/task.entity';
 
 @Controller('tasks')
 export class TasksController {
@@ -33,12 +33,12 @@ export class TasksController {
   }
 
   @Get('/:id')
-  getTaskById(@Param('id') id: string): Task {
+  getTaskById(@Param('id') id: string): Promise<Task> {
     return this.tasksService.getTaskById(id);
   }
 
   @Delete('/:id')
-  deleteById(@Param('id') id: string): void {
+  deleteById(@Param('id') id: string): Promise<void> {
     return this.tasksService.delete(id);
   }
 
@@ -46,7 +46,7 @@ export class TasksController {
   patchTask(
     @Param('id') taskId: string,
     @Body() patchTaskDto: PatchTaskDto,
-  ): Task {
+  ): Promise<Task> {
     return this.tasksService.patch(taskId, patchTaskDto);
   }
 }

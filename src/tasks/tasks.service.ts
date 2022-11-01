@@ -3,60 +3,62 @@ import { PatchTaskDto } from './dto/patch-task.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateTaskDto } from './dto/create-task.dto';
-// import { Task, TaskStatusEnum } from './task.model';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Task } from 'src/entities/task.entity';
+import { Task } from 'src/tasks/entities/task.entity';
 import { EntityRepository } from '@mikro-orm/core';
 import { TaskStatusEnum } from './task-status.enum';
+import { Tag } from './entities/tag.enitity';
+import { Book } from './entities/book.entity';
 
 @Injectable()
 export class TasksService {
-  private tasks: Task[] = [];
-
   constructor(
     @InjectRepository(Task)
     private readonly taskRepository: EntityRepository<Task>,
+    @InjectRepository(Tag)
+    private readonly tagRepository: EntityRepository<Tag>,
   ) {}
 
-  getAllTasks(): Promise<Task[]> {
-    return this.taskRepository.findAll();
+  async getAllTasks(): Promise<Task[]> {
+    return this.taskRepository.findAll({
+      populate: ['books', 'tags'],
+    });
   }
 
-  createTask({ description, title }: CreateTaskDto): Promise<Task> {
-    const newTask: Task = {
-      description,
-      title,
+  async createTask({ description, title, tags }: CreateTaskDto): Promise<Task> {
+    const preloadedTags = await Promise.all(
+      tags.map((i) => this.preloadTagByName(i)),
+    );
+
+    return this.taskRepository.create({
       id: uuidv4(),
-      status: TaskStatusEnum.OPEN,
-    };
-
-    this.taskRepository.create(newTask);
-    // this.tasks.push(newTask);
-    // this.taskRepository.persist(newTask);
-    return this.taskRepository.findOne({ id: newTask.id });
-    // return this.taskRepository.flush();
+      description: description,
+      title: title,
+      status: TaskStatusEnum.DONE,
+      tags: preloadedTags,
+      books: new Book(),
+    });
   }
 
-  getTaskById(taskId: Task['id']): Task {
-    const task = this.tasks.find((i) => i.id === taskId);
-
+  async getTaskById(taskId: Task['id']): Promise<Task> {
+    const task = await this.taskRepository.findOne({ id: taskId });
     if (!task) {
       throw new NotFoundException(`Task with ID ${taskId} not found`);
     }
-
     return task;
   }
 
-  delete(taskId: Task['id']): void {
-    const task = this.getTaskById(taskId);
-    this.tasks = this.tasks.filter((i) => i.id !== task.id);
+  async delete(taskId: Task['id']): Promise<void> {
+    const task = await this.getTaskById(taskId);
+    return this.taskRepository.removeAndFlush(task);
   }
 
-  patch(taskId: Task['id'], { status }: PatchTaskDto): Task {
-    const task = this.getTaskById(taskId);
+  async patch(taskId: Task['id'], { status }: PatchTaskDto): Promise<Task> {
+    const task = await this.getTaskById(taskId);
     task.status = status;
 
-    return task;
+    await this.taskRepository.persistAndFlush(task);
+    return this.taskRepository.findOne({ id: task.id });
   }
 
   async getTasksWithFilters(filterDto: GetTasksFilterDto): Promise<Task[]> {
@@ -77,6 +79,15 @@ export class TasksService {
       });
     }
 
+    // await this.taskRepository.persistAndFlush(tasks);
     return tasks;
+  }
+
+  private async preloadTagByName(name: string) {
+    const existingTag = await this.tagRepository.findOne({ name });
+    if (existingTag) {
+      return existingTag;
+    }
+    return this.tagRepository.create({ name });
   }
 }

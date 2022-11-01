@@ -6,6 +6,7 @@ import { LoadStrategy } from '@mikro-orm/core';
 const config: MikroOrmModuleOptions = {
   entities: ['dist/**/*.entity.js'],
   entitiesTs: ['src/**/*.entity.ts'],
+  autoLoadEntities: true,
   type: 'postgresql',
   host: 'localhost',
   port: 49153,
@@ -18,6 +19,10 @@ const config: MikroOrmModuleOptions = {
   highlighter: new SqlHighlighter(),
   metadataProvider: TsMorphMetadataProvider,
   registerRequestContext: false,
+  migrations: {
+    path: 'dist/migrations',
+    pathTs: 'src/migrations',
+  },
 };
 
 export default config;
