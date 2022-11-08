@@ -1,9 +1,15 @@
-<div style="text-align: center">
-  <h1>Welcome to pw!</h1>
-  <img
-    width="450"
-    src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-    alt="Nx - Smart, Fast and Extensible Build System"
-  />
-</div>
-<div>Message: {{ hello$ | async | json }}</div>
+<nz-layout>
+  <nz-header class="flex items-center">
+    <div class="logo"></div>
+    <ul nz-menu nzTheme="dark" nzMode="horizontal">
+      <li nz-menu-item>nav 1</li>
+    </ul>
+    <button class="ml-auto" nz-button nzType="primary" (click)="login()">
+      Login
+    </button>
+  </nz-header>
+  <nz-content>
+    <div class="inner-content">Content</div>
+  </nz-content>
+  <nz-footer></nz-footer>
+</nz-layout>

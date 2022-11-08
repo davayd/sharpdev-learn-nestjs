@@ -10,7 +10,7 @@ import {
 } from '@mikro-orm/core';
 import { Tag } from './tag.enitity';
 import { Book } from './book.entity';
-import { TaskStatusEnum } from 'src/tasks/task-status.enum';
+import { TaskStatusEnum } from '../task-status.enum';
 
 @Entity()
 export class Task {

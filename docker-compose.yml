@@ -23,7 +23,7 @@ services:
     # restart: unless-stopped
     environment:
       KC_DB: mysql
-      KC_DB_URL: 'jdbc:mysql://mysql_keycloak:3306/keycloak'
+      KC_DB_URL: 'jdbc:mysql://mysql:3306/keycloak'
       KC_DB_USERNAME: ${KC_USER}
       KC_DB_PASSWORD: ${KC_PASSWORD}
       KEYCLOAK_ADMIN: admin

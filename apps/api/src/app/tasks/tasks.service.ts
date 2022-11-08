@@ -4,11 +4,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Task } from 'src/tasks/entities/task.entity';
 import { EntityRepository } from '@mikro-orm/core';
 import { TaskStatusEnum } from './task-status.enum';
 import { Tag } from './entities/tag.enitity';
 import { Book } from './entities/book.entity';
+import { Task } from './entities/task.entity';
 
 @Injectable()
 export class TasksService {

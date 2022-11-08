@@ -17,7 +17,7 @@ const config: MikroOrmModuleOptions = {
   debug: true,
   loadStrategy: LoadStrategy.JOINED,
   highlighter: new SqlHighlighter(),
-  metadataProvider: TsMorphMetadataProvider,
+  // metadataProvider: TsMorphMetadataProvider,
   registerRequestContext: false,
   migrations: {
     path: 'dist/migrations',

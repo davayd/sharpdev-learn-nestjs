@@ -7,7 +7,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/pw",
         "index": "apps/pw/src/index.html",
@@ -15,8 +17,19 @@
         "polyfills": "apps/pw/src/polyfills.ts",
         "tsConfig": "apps/pw/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/pw/src/favicon.ico", "apps/pw/src/assets"],
-        "styles": ["apps/pw/src/styles.scss"],
+        "assets": [
+          "apps/pw/src/favicon.ico",
+          "apps/pw/src/assets",
+          {
+            "glob": "**/*",
+            "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+            "output": "/assets/"
+          }
+        ],
+        "styles": [
+          "./node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
+          "apps/pw/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -76,12 +89,17 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/pw/**/*.ts", "apps/pw/**/*.html"]
+        "lintFilePatterns": [
+          "apps/pw/**/*.ts",
+          "apps/pw/**/*.html"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/pw/jest.config.ts",
         "passWithNoTests": true
