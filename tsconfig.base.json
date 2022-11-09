@@ -15,7 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@sharpdev-pw/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@sharpdev-pw/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@ui-core/*": ["apps/pw/src/app/core/*"],
+      "@ui-environment/*": ["apps/pw/src/environments/*"],
     }
   },
   "exclude": ["node_modules", "tmp"]

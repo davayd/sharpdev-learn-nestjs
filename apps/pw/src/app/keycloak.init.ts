@@ -11,13 +11,9 @@ function initializeKeycloak(keycloak: KeycloakService) {
       },
       bearerPrefix: 'Bearer',
       initOptions: {
-
-        // checkLoginIframe: false,
-        // flow: 'standard',
-        // onLoad: 'check-sso',
-        // silentCheckSsoRedirectUri:
-        //   window.location.origin + '/assets/silent-check-sso.html',
-        // redirectUri: 'http://localhost:4200',
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri:
+          window.location.origin + '/assets/silent-check-sso.html',
       },
     });
 }
